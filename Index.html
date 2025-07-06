@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saudagar WP - Toko Online</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoVkF0sA7MsXZyX+e3hZl5N6NKKK6GpGFF93hXpG5KkN"
+    crossorigin="anonymous"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff;
+      color: #333;
+    }
+    /* Navbar brand - logo text style */
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #222;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .navbar-brand svg {
+      fill: #9b5c6c; /* Brand purple shade */
+      width: 32px;
+      height: 32px;
+    }
+    /* Navbar links style */
+    .nav-link {
+      color: #555;
+      font-weight: 500;
+    }
+    .nav-link:hover, .dropdown-item:hover {
+      color: #9b5c6c;
+    }
+    /* Product card style */
+    .product-card {
+      background: #f9f9f9;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+      transition: box-shadow 0.3s ease;
+      cursor: pointer;
+      text-align: center;
+      padding: 1rem 1rem 1.5rem;
+      border: 1px solid #eee;
+    }
+    .product-card:hover {
+      box-shadow: 0 4px 15px rgb(0 0 0 / 0.15);
+    }
+    .product-card img {
+      background: #eee;
+      border-radius: 6px 6px 0 0;
+      max-width: 100%;
+      object-fit: contain;
+      height: 170px;
+      margin-bottom: 1rem;
+    }
+    .product-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+      color: #222;
+    }
+    .product-price {
+      color: #7a7a7a;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    /* Footer styling */
+    footer {
+      background-color: #1b1b1b;
+      color: #ccc;
+      padding: 2.5rem 1rem 1.25rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #ccc;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    footer a:hover {
+      color: #9b5c6c;
+      text-decoration: underline;
+    }
+    .footer-social-icons i {
+      font-size: 1.4rem;
+      margin-right: 15px;
+      cursor: pointer;
+      color: #ccc;
+      transition: color 0.3s;
+    }
+    .footer-social-icons i:hover {
+      color: #9b5c6c;
+    }
+    .marketplace-icons img {
+      height: 40px;
+      width: 40px;
+      margin-right: 1rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: white;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .marketplace-icons img:hover {
+      transform: scale(1.1);
+    }
+    /* WhatsApp floating button */
+    #whatsapp-btn {
+      position: fixed;
+      bottom: 75px;
+      right: 20px;
+      background-color: #25d366;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1055;
+      transition: background-color 0.3s ease;
+    }
+    #whatsapp-btn:hover {
+      background-color: #1da851;
+    }
+    #whatsapp-btn i {
+      color: white;
+      font-size: 28px;
+    }
+    /* Scroll to top button */
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 140px;
+      right: 25px;
+      background: #222;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: white;
+      font-size: 1.5rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1050;
+      opacity: 0.75;
+      transition: opacity 0.3s;
+    }
+    #scrollTopBtn:hover {
+      opacity: 1;
+    }
+    /* Popup purchase notification */
+    #purchase-popup {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgb(0 0 0 / 0.2);
+      width: 320px;
+      max-width: 95vw;
+      display: flex;
+      padding: 12px;
+      font-size: 0.9rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      animation: popupIn 0.6s ease forwards;
+      z-index: 1060;
+    }
+    @keyframes popupIn {
+      0% {
+        opacity: 0;
+        transform: translateX(-100%) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0);
+      }
+    }
+    #purchase-popup img {
+      border-radius: 6px;
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-right: 10px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+    }
+    #purchase-popup .content {
+      flex: 1;
+    }
+    #purchase-popup strong {
+      display: block;
+      font-weight: 700;
+    }
+    #purchase-popup .name {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    #purchase-popup .time {
+      color: #666;
+      font-size: 0.85rem;
+    }
+    #purchase-popup .close-btn {
+      cursor: pointer;
+      color: #888;
+      font-size: 1.2rem;
+      margin-left: 10px;
+      align-self: start;
+      line-height: 0;
+      border: none;
+      background: transparent;
+      transition: color 0.3s ease;
+    }
+    #purchase-popup .close-btn:hover {
+      color: #9b5c6c;
+    }
+    /* Carousel product info overlay */
+    .carousel-caption {
+      top: 50%;
+      transform: translateY(-50%);
+      bottom: initial;
+      text-align: left;
+      color: #222;
+      max-width: 400px;
+    }
+    .carousel-caption h2 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #222;
+    }
+    .carousel-caption p {
+      font-weight: 500;
+      font-size: 1.15rem;
+      margin-bottom: 1.5rem;
+      color: #444;
+    }
+    .carousel-caption .btn-primary {
+      background-color: #9b5c6c;
+      border-color: #9b5c6c;
+      font-weight: 600;
+      padding: 0.65rem 1.5rem;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      transition: background-color 0.3s ease;
+    }
+    .carousel-caption .btn-primary:hover {
+      background-color: #7e4855;
+      border-color: #7e4855;
+    }
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      .carousel-caption {
+        max-width: 90vw;
+        font-size: 0.9rem;
+      }
+      .carousel-caption h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <!-- Custom logo icon -->
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" role="img"><path d="M5.2 2.5l11 11c.54.54.54 1.4 0 1.94-1.97 1.97-6.16 6.15-7.23 7.44-.27.31-.79.31-1.06 0-.27-.31-.3-.8 0-1.13 1.06-1.3 4.79-5.74 6.06-7.18L11.06 13l-5.9-6V5.6l-.03-.05A1.34 1.34 0 015.2 2.5z" /></svg>
+        SAUDAGAR
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Katalog</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Kategori
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Pakaian</a></li>
+              <li><a class="dropdown-item" href="#">Aksesoris</a></li>
+              <li><a class="dropdown-item" href="#">Tas & Dompet</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Tipe Produk
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Diskon</a></li>
+              <li><a class="dropdown-item" href="#">Terbaru</a></li>
+              <li><a class="dropdown-item" href="#">Terlaris</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Blog</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ms-3 align-items-center">
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#" title="Cari produk">
+              <i class="bi bi-search"></i>
+            </a>
+          </li>
+
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#" title="Akun Saya">
+              <i class="bi bi-person"></i>
+            </a>
+          </li>
+
+          <li class="nav-item position-relative">
+            <a class="nav-link" href="#" title="Keranjang Belanja">
+              <i class="bi bi-cart"></i>
+            </a>
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              style="font-size: 0.7rem; padding: 0.25em 0.4em;"
+              >0</span
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Carousel Hero -->
+  <div
+    id="heroCarousel"
+    class="carousel slide"
+    data-bs-ride="carousel"
+    data-bs-interval="5000"
+  >
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img
+          src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8a880518-7db5-44ee-ac7c-c5f650bef563.png"
+          class="d-block w-100"
+          alt="Young man casually dressed smiling while holding fedora hat, background yellow and gray circle graphic style"
+          onerror="this.style.display='none'"
+        />
+        <div class="carousel-caption d-none d-md-block">
+          <h2>Summer Fashion Trend</h2>
+          <p>Discover the latest styles for this summer season.</p>
+          <a href="#" class="btn btn-primary">Shop Now</a>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <img
+          src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/871bb289-1648-4c00-8618-a454be7799fd.png"
+          class="d-block w-100"
+          alt="Modern urban style clothing items laid out neatly on white background"
+          onerror="this.style.display='none'"
+        />
+        <div class="carousel-caption d-none d-md-block">
+          <h2>Produk Unggulan</h2>
+          <p>Temukan koleksi terbaik dengan kualitas terjamin.</p>
+          <a href="#" class="btn btn-primary">Lihat Koleksi</a>
+        </div>
+      </div>
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#heroCarousel"
+      data-bs-slide="prev"
+      aria-label="Previous"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#heroCarousel"
+      data-bs-slide="next"
+      aria-label="Next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <main class="container my-5">
+    <h3 class="mb-4 fw-bold text-center">Produk Terbaru</h3>
+    <div class="row g-3 justify-content-center">
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/62f8c696-119f-4a9c-942e-5c7cd73314d4.png"
+            alt="Gray canvas tote bag with black handles and 'carry on' white text on front, product image"
+          />
+          <div class="product-title">Carry On</div>
+          <div class="product-price">Rp480.000</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ed20a204-70d5-4283-a520-dbf64066c862.png"
+            alt="Minimalist blue t-shirt with light blue wave graphic design on front"
+          />
+          <div class="product-title">Ripple Blue</div>
+          <div class="product-price">Rp150.000</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f01ff8c1-619d-40c5-a1dd-042d4942455f.png"
+            alt="Waxed canvas messenger bag in greenish-blue color with long leather strap"
+          />
+          <div class="product-title">Waxed Canvas Messenger Bag</div>
+          <div class="product-price">Rp580.000</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/af1e21f1-3c77-407d-9563-5a2de8e0c3bd.png"
+            alt="Waxed canvas messenger bag in navy blue with brown leather handles and strap"
+          />
+          <div class="product-title">Waxed Canvas Messenger Bag</div>
+          <div class="product-price">Rp580.000</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="my-5 fw-bold text-center">Produk Unggulan</h3>
+    <div class="row g-3 justify-content-center">
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/676bddd9-f3fd-4857-bc49-e87a6a574636.png"
+            alt="Waxed canvas messenger bag in navy blue with brown leather handles and straps"
+          />
+          <div class="product-title">Waxed Canvas Messenger Bag</div>
+          <div class="product-price">Rp580.000</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9a011783-5574-4684-82a0-2a3a621752c0.png"
+            alt="Blue T-shirt with text graphic 'Do What You Love What You Do'"
+          />
+          <div class="product-title">Do What You Love</div>
+          <div class="product-price">Rp320.000</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/856086eb-85a6-4be7-bcac-c1694800e416.png"
+            alt="Black T-shirt with large ampersand graphic design on front"
+          />
+          <div class="product-title">And Then I Woke Up</div>
+          <div class="product-price">Rp320.000</div>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="product-card">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2d12fd9d-959c-47a2-ab34-de17861cbbc9.png"
+            alt="Premium ampersand crewneck dark red sweater with large white ampersand graphic"
+          />
+          <div class="product-title">Premium Ampersand Crewneck</div>
+          <div class="product-price">Rp540.000</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row text-light">
+        <div class="col-md-5 mb-4 mb-md-0">
+          <h5 class="fw-bold mb-3">Saudagar WP</h5>
+          <p>
+            Saudagar WP merupakan tema toko online yang dibuat khusus untuk WordPress dan WooCommerce.
+          </p>
+          <div class="footer-social-icons d-flex gap-3">
+            <a href="#" aria-label="Facebook" title="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram" title="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="YouTube" title="YouTube"><i class="bi bi-youtube"></i></a>
+            <a href="#" aria-label="TikTok" title="TikTok"><i class="bi bi-tiktok"></i></a>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5 class="fw-bold mb-3">Link Penting</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">Konfirmasi Pembayaran</a></li>
+            <li><a href="#">Pembayaran & Pengiriman</a></li>
+            <li><a href="#">Syarat & Ketentuan</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5 class="fw-bold mb-3">Marketplace</h5>
+          <div class="marketplace-icons d-flex align-items-center">
+            <a href="#" title="Bukalapak">
+              <img
+                src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e614c444-3663-4889-9a9d-8cf036ce5caf.png"
+                alt="Bukalapak marketplace logo red circle with white b letter"
+                onerror="this.style.display='none'"
+              />
+            </a>
+            <a href="#" title="Tokopedia">
+              <img
+                src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef643c14-c80e-40e9-a93c-03db05de20d8.png"
+                alt="Tokopedia marketplace logo green bag with owl bird icon"
+                onerror="this.style.display='none'"
+              />
+            </a>
+            <a href="#" title="Shopee">
+              <img
+                src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6d077fd0-cfaf-4e9e-9944-12b26d25224b.png"
+                alt="Shopee marketplace logo orange shopping bag with white letter s"
+                onerror="this.style.display='none'"
+              />
+            </a>
+            <a href="#" title="TikTok Shop">
+              <img
+                src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fe6f28a3-5937-4392-aaaf-b897f5b537c1.png"
+                alt="TikTok Shop logo black musical note on white square background"
+                onerror="this.style.display='none'"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-3 border-secondary" />
+
+      <p class="text-center mb-0" style="font-weight: 500;">
+        © Copyright Toko Saudagar WP. All Rights Reserved
+      </p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Button -->
+  <a
+    href="https://wa.me/6281234567890"
+    target="_blank"
+    rel="noopener noreferrer"
+    id="whatsapp-btn"
+    aria-label="WhatsApp chat"
+    title="Hubungi kami lewat WhatsApp"
+  >
+    <i class="bi bi-whatsapp"></i>
+  </a>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" aria-label="Scroll to top" title="Scroll to top">
+    <i class="bi bi-arrow-up-short"></i>
+  </button>
+
+  <!-- Purchase Notification Popup -->
+  <div id="purchase-popup" role="alert" aria-live="assertive" aria-atomic="true" hidden>
+    <img
+      src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d64dacbe-59f7-4939-a0be-85f0eb12cdff.png"
+      alt="Happy Ninja, gray T-shirt with ninja graphic on front, product photo"
+    />
+    <div class="content">
+      <strong><i class="bi bi-lightning-charge-fill" style="color:#f1a10a; margin-right:4px;"></i> Abdul Wahid</strong>
+      <span class="name">baru saja membeli <strong>Happy Ninja</strong></span>
+      <span class="time">6 bulan ago</span>
+    </div>
+    <button class="close-btn" aria-label="Close notification" title="Tutup notifikasi">&times;</button>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-q2p2V33CZabB+0vxCcp0Bbq9yovLAW8OWjPaRO/+hpPfobsOVQO4f9Pqa7biIX+N"
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const popup = document.getElementById('purchase-popup');
+      const closeBtn = popup.querySelector('.close-btn');
+
+      // Show popup after 3 seconds delay
+      setTimeout(() => {
+        popup.hidden = false;
+      }, 3000);
+
+      // Close popup on button click
+      closeBtn.addEventListener('click', () => {
+        popup.hidden = true;
+      });
+
+      // Scroll to top button
+      const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          scrollTopBtn.style.display = 'flex';
+        } else {
+          scrollTopBtn.style.display = 'none';
+        }
+      });
+
+      scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
